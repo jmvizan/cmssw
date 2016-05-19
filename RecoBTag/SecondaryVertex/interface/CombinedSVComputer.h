@@ -1,5 +1,61 @@
 #ifndef RecoBTag_SecondaryVertex_CombinedSVComputer_h
 #define RecoBTag_SecondaryVertex_CombinedSVComputer_h
+/*
+//#include "RecoBTau/JetTagComputer/interface/JetTagComputer.h"
+
+//#include <iostream>
+#include <cstddef>
+#include <string>
+#include <cmath>
+//#include <vector>
+
+#include <Math/VectorUtil.h>
+
+#include "FWCore/ParameterSet/interface/ParameterSet.h"
+#include "FWCore/Utilities/interface/Exception.h"
+#include "FWCore/ParameterSet/interface/ParameterSet.h"
+
+#include "DataFormats/Math/interface/Vector3D.h"
+#include "DataFormats/Math/interface/LorentzVector.h"
+#include "DataFormats/GeometryCommonDetAlgo/interface/Measurement1D.h"
+#include "DataFormats/GeometryVector/interface/GlobalPoint.h"
+#include "DataFormats/GeometryVector/interface/GlobalVector.h"
+#include "DataFormats/GeometryVector/interface/VectorUtil.h"
+#include "DataFormats/TrackReco/interface/Track.h"
+#include "DataFormats/TrackReco/interface/TrackFwd.h"
+
+#include "DataFormats/BTauReco/interface/SecondaryVertexTagInfo.h"
+
+#include "DataFormats/BTauReco/interface/CandSecondaryVertexTagInfo.h"
+#include "DataFormats/BTauReco/interface/TaggingVariable.h"
+#include "DataFormats/BTauReco/interface/VertexTypes.h"
+#include "DataFormats/BTauReco/interface/ParticleMasses.h"
+#include "DataFormats/JetReco/interface/PFJet.h"
+#include "DataFormats/PatCandidates/interface/Jet.h"
+
+#include "RecoBTag/SecondaryVertex/interface/TrackSelector.h"
+#include "RecoBTag/SecondaryVertex/interface/V0Filter.h"
+#include "RecoBTag/SecondaryVertex/interface/TrackSorting.h"
+#include "RecoBTag/SecondaryVertex/interface/TrackKinematics.h"
+
+
+#include "DataFormats/BTauReco/interface/BaseTagInfo.h"
+#include "RecoBTau/JetTagComputer/interface/GenericMVAJetTagComputer.h"
+
+//For scikit tagger
+//#include "FWCore/ParameterSet/interface/ParameterSet.h"
+#include "CommonTools/Utils/interface/TMVAEvaluator.h"
+#include "RecoBTau/JetTagComputer/interface/JetTagComputer.h"
+#include <mutex>
+#include "FWCore/Utilities/interface/ESInputTag.h"
+//#include "RecoBTag/SecondaryVertex/interface/CombinedSVSoftLeptonComputer.h"
+
+#include "DataFormats/BTauReco/interface/TaggingVariable.h"
+
+#include "RecoBTau/JetTagComputer/interface/JetTagComputerRecord.h"
+#include "DataFormats/BTauReco/interface/BaseTagInfo.h"
+*/
+
 
 #include <iostream>
 #include <cstddef>
@@ -9,9 +65,17 @@
 
 #include <Math/VectorUtil.h>
 
+
 #include "FWCore/ParameterSet/interface/ParameterSet.h"
 #include "FWCore/Utilities/interface/Exception.h"
-#include "FWCore/ParameterSet/interface/ParameterSet.h"
+
+#include "CommonTools/Utils/interface/TMVAEvaluator.h"
+#include "RecoBTau/JetTagComputer/interface/JetTagComputer.h"
+#include <mutex>
+#include "FWCore/Utilities/interface/ESInputTag.h"
+//#include "RecoBTag/SecondaryVertex/interface/CombinedSVSoftLeptonComputer.h"
+#include "DataFormats/BTauReco/interface/TaggingVariable.h"
+#include "RecoBTau/JetTagComputer/interface/JetTagComputerRecord.h"
 
 #include "DataFormats/Math/interface/Vector3D.h"
 #include "DataFormats/Math/interface/LorentzVector.h"
@@ -35,11 +99,18 @@
 #include "RecoBTag/SecondaryVertex/interface/TrackKinematics.h"
 
 
+
+#include <memory>
+
+
+
+
+
+
 #define range_for(i, x) \
         for(int i = (x).begin; i != (x).end; i += (x).increment)
 
-
-class CombinedSVComputer {
+class CombinedSVComputer  : public JetTagComputer{
     public:
 	explicit CombinedSVComputer(const edm::ParameterSet &params);
 
@@ -73,6 +144,22 @@ class CombinedSVComputer {
 				 const IPTI & ipInfo,const SVTI & svInfo,
 				 double & vtx_track_ptSum, double & vtx_track_ESum) const;
 
+        //For scikit tagger
+        virtual float discriminator(const TagInfoHelper & tagInfo) const override;
+	virtual void initialize(const JetTagComputerRecord & record) override;
+	
+        //virtual float discriminator(const TagInfoHelper & tagInfo) const ;
+	//virtual void initialize(const JetTagComputerRecord & record) ;
+	
+	typedef std::vector<edm::ParameterSet> vpset;
+	
+	struct MVAVar {
+		std::string name;
+		reco::btau::TaggingVariableName id;
+		size_t index;
+		bool has_index;
+		float default_value;
+	};
     private:
 	bool					trackFlip;
 	bool					vertexFlip;
@@ -89,6 +176,18 @@ class CombinedSVComputer {
 	reco::V0Filter				pseudoVertexV0Filter;
 	reco::V0Filter				trackPairV0Filter;
 	std::vector<reco::btau::TaggingVariableName>	taggingVariables;
+
+        //For scikit tagger
+	std::unique_ptr<TMVAEvaluator> mvaID_;
+	//CombinedSVSoftLeptonComputer sl_computer_;
+	std::vector<MVAVar> variables_;
+
+	std::string mva_name_;
+        bool use_condDB_;
+	std::string gbrForest_label_;
+	edm::FileInPath weight_file_;
+        bool use_GBRForest_;
+        bool use_adaBoost_;
 };
 
 template <class SVTI,class IPTI>
