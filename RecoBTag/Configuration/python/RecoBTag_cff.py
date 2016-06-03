@@ -6,6 +6,7 @@ from RecoBTag.ImpactParameter.impactParameter_cff import *
 from RecoBTag.SecondaryVertex.secondaryVertex_cff import *
 from RecoBTag.Combined.combinedMVA_cff import *
 from RecoBTag.CTagging.RecoCTagging_cff import *
+from RecoBTag.CSVscikit.RecoCSVscikit_cff import *
 from RecoVertex.AdaptiveVertexFinder.inclusiveVertexing_cff import *
 
 legacyBTagging = cms.Sequence(
@@ -78,5 +79,5 @@ pfBTagging = cms.Sequence(
 )
 
 btagging = cms.Sequence(
-    pfBTagging * pfCTagging
+    pfBTagging * pfCTagging * pfCSVscikit
 )
