@@ -19,6 +19,7 @@
 
 CSVscikitTagger::CSVscikitTagger(const edm::ParameterSet & configuration):
 	sl_computer_(configuration.getParameter<edm::ParameterSet>("slComputerCfg")),
+	sv_computer_(configuration.getParameter<edm::ParameterSet>("slComputerCfg")),
   mva_name_( configuration.getParameter<std::string >("mvaName") ),
   use_condDB_(configuration.getParameter<bool>("useCondDB")),
   gbrForest_label_(configuration.getParameter<std::string>("gbrForestLabel")),
@@ -97,9 +98,10 @@ float CSVscikitTagger::discriminator(const TagInfoHelper & tagInfo) const {
   // default value, used if there are no leptons associated to this jet
   const reco::CandIPTagInfo & ip_info = tagInfo.get<reco::CandIPTagInfo>(0);
 	const reco::CandSecondaryVertexTagInfo & sv_info = tagInfo.get<reco::CandSecondaryVertexTagInfo>(1);
-	const reco::CandSoftLeptonTagInfo& softmu_info = tagInfo.get<reco::CandSoftLeptonTagInfo>(2);
-	const reco::CandSoftLeptonTagInfo& softel_info = tagInfo.get<reco::CandSoftLeptonTagInfo>(3);
-	reco::TaggingVariableList vars = sl_computer_(ip_info, sv_info, softmu_info, softel_info);
+	//const reco::CandSoftLeptonTagInfo& softmu_info = tagInfo.get<reco::CandSoftLeptonTagInfo>(2);
+	//const reco::CandSoftLeptonTagInfo& softel_info = tagInfo.get<reco::CandSoftLeptonTagInfo>(3);
+	//reco::TaggingVariableList vars = sl_computer_(ip_info, sv_info, softmu_info, softel_info);
+	reco::TaggingVariableList vars = sv_computer_(ip_info, sv_info);
 
 	// Loop over input variables
 	std::map<std::string, float> inputs;
