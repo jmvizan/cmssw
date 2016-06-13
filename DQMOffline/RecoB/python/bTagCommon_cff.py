@@ -18,6 +18,7 @@ from DQMOffline.RecoB.cTagCorrelationAnalysis_cff import *
 from DQMOffline.RecoB.bTagGhostTrackAnalysis_cff import *
 from DQMOffline.RecoB.bTagGhostTrackVariables_cff import *
 
+from DQMOffline.RecoB.CSVscikitAnalysis_cff import *
 bTagCommonBlock = cms.PSet(
     # use pre-computed jet flavour identification
     # new default is to use genparticles - and it is the only option
@@ -93,7 +94,8 @@ bTagCommonBlock = cms.PSet(
             folder = cms.string("CSVv2")
         ),
 	cms.PSet(
-            bTagGenericAnalysisBlock,
+            #bTagGenericAnalysisBlock,
+            CSVscikitAnalysisBlock,
             #label = cms.InputTag("pfCSVscikit"),
             label = cms.InputTag("pfCSVscikitJetTags"),
             folder = cms.string("CSVscikit"),
