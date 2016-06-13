@@ -52,9 +52,10 @@ CSVscikitTagger::CSVscikitTagger(const edm::ParameterSet & configuration):
 	}
 
 	uses(0, "pfImpactParameterTagInfos");
-	uses(1, "pfInclusiveSecondaryVertexFinderCvsLTagInfos");
-	uses(2, "softPFMuonsTagInfos");
-	uses(3, "softPFElectronsTagInfos");
+	//uses(1, "pfInclusiveSecondaryVertexFinderCvsLTagInfos");
+	uses(1, "pfInclusiveSecondaryVertexFinderTagInfos");
+	//uses(2, "softPFMuonsTagInfos");
+	//uses(3, "softPFElectronsTagInfos");
 }
 
 void CSVscikitTagger::initialize(const JetTagComputerRecord & record)
@@ -105,19 +106,26 @@ float CSVscikitTagger::discriminator(const TagInfoHelper & tagInfo) const {
 
 	// Loop over input variables
 	std::map<std::string, float> inputs;
+	//std::cout << "jetvars->";
 	for(auto &mva_var : variables_){
 		//vectorial tagging variable
 		if(mva_var.has_index){
 			std::vector<float> vals = vars.getList(mva_var.id, false);
 			inputs[mva_var.name] = (vals.size() > mva_var.index) ? vals[mva_var.index] : mva_var.default_value;
+			////std::cout << " var[" << mva_var.name << "]=" << inputs[mva_var.name];
+			//std::cout << inputs[mva_var.name] << "\t";
 		}
 		//single value tagging var
 		else {
 			inputs[mva_var.name] = vars.get(mva_var.id, mva_var.default_value);
+			////std::cout << " var[" << mva_var.name << "]=" << inputs[mva_var.name];
+			//std::cout << inputs[mva_var.name] << "\t";
 		}
 	}
 
 	//get the MVA output
 	float tag = mvaID_->evaluate(inputs);
+	////std::cout << "---> tag = " << tag << std::endl;
+	//std::cout << tag <<"\n";
 	return tag;
 }

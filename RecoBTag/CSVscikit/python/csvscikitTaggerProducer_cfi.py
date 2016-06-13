@@ -1,6 +1,7 @@
 import FWCore.ParameterSet.Config as cms
 #use import as to mask it to process.load() 
-import RecoBTag.SecondaryVertex.candidateCombinedSecondaryVertexSoftLeptonComputer_cfi as sl_cfg 
+#import RecoBTag.SecondaryVertex.candidateCombinedSecondaryVertexSoftLeptonComputer_cfi as sl_cfg 
+import RecoBTag.SecondaryVertex.candidateCombinedSecondaryVertexV2Computer_cfi as sl_cfg 
 from RecoBTag.CSVscikit.training_settings import csvscikit_vpset
 
 #charmTagsComputerCvsL = cms.ESProducer(
@@ -9,16 +10,20 @@ CSVscikitTags = cms.ESProducer(
    'CSVscikitESProducer',
    #clone the cfg only
    slComputerCfg = cms.PSet(
-      **sl_cfg.candidateCombinedSecondaryVertexSoftLeptonComputer.parameters_()
+      #**sl_cfg.candidateCombinedSecondaryVertexSoftLeptonComputer.parameters_()
+      **sl_cfg.candidateCombinedSecondaryVertexV2Computer.parameters_()
       ),
    weightFile = cms.FileInPath('RecoBTag/CSVscikit/data/TMVAClassification_BDTG.weights.xml'),
    variables = csvscikit_vpset,
-   computer = cms.ESInputTag('combinedSecondaryVertexSoftLeptonComputer'),
+   #computer = cms.ESInputTag('combinedSecondaryVertexSoftLeptonComputer'),
+   computer = cms.ESInputTag('justastupiddummyname'),
+   #computer = cms.ESInputTag('combinedSecondaryVertexComputer'),
    tagInfos = cms.VInputTag(
       cms.InputTag('pfImpactParameterTagInfos'),
-      cms.InputTag('pfInclusiveSecondaryVertexFinderCvsLTagInfos'),
-      cms.InputTag('softPFMuonsTagInfos'),
-      cms.InputTag('softPFElectronsTagInfos'),
+      #cms.InputTag('pfInclusiveSecondaryVertexFinderCvsLTagInfos'),
+      cms.InputTag('pfInclusiveSecondaryVertexFinderTagInfos'),
+      #cms.InputTag('softPFMuonsTagInfos'),
+      #cms.InputTag('softPFElectronsTagInfos'),
       ),
    mvaName = cms.string('BDT'),
    useCondDB = cms.bool(False),
@@ -28,7 +33,7 @@ CSVscikitTags = cms.ESProducer(
    )
 
 #charmTagsComputerCvsL.slComputerCfg.correctVertexMass = False
-CSVscikitTags.slComputerCfg.correctVertexMass = False
+#CSVscikitTags.slComputerCfg.correctVertexMass = False
 
 #charmTagsComputerCvsB = charmTagsComputerCvsL.clone(
 #CSVscikitTagsdummy = CSVscikitTags.clone(

@@ -7,9 +7,10 @@ pfCSVscikitJetTags  = cms.EDProducer(
    jetTagComputer = cms.string('CSVscikitTags'),
    tagInfos = cms.VInputTag(
       cms.InputTag('pfImpactParameterTagInfos'),
-      cms.InputTag('pfInclusiveSecondaryVertexFinderCvsLTagInfos'),
-      cms.InputTag('softPFMuonsTagInfos'),
-      cms.InputTag('softPFElectronsTagInfos'),
+      #cms.InputTag('pfInclusiveSecondaryVertexFinderCvsLTagInfos'),
+      cms.InputTag('pfInclusiveSecondaryVertexFinderTagInfos'),
+      #cms.InputTag('softPFMuonsTagInfos'),
+      #cms.InputTag('softPFElectronsTagInfos'),
       )
 )
 
