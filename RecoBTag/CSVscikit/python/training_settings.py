@@ -26,31 +26,31 @@ csvscikit_vpset = cms.VPSet(
 		    taggingVarName = cms.string('jetNTracks')
 		 ),
 		cms.PSet(
-		    default = cms.double(-100),
+		    default = cms.double(-99.0),
 		    idx = cms.int32(0),
 		    name = cms.string('TagVarCSV_trackSip3dSig_0'),
 		    taggingVarName = cms.string('trackSip3dSig')
 		 ),
 		cms.PSet(
-		    default = cms.double(-100),
+		    default = cms.double(-99.0),
 		    idx = cms.int32(1),
 		    name = cms.string('TagVarCSV_trackSip3dSig_1'),
 		    taggingVarName = cms.string('trackSip3dSig')
 		 ),
 		cms.PSet(
-		    default = cms.double(-100),
+		    default = cms.double(-99.0),
 		    idx = cms.int32(2),
 		    name = cms.string('TagVarCSV_trackSip3dSig_2'),
 		    taggingVarName = cms.string('trackSip3dSig')
 		 ),
 		cms.PSet(
-		    default = cms.double(-100),
+		    default = cms.double(-99.0),
 		    idx = cms.int32(3),
 		    name = cms.string('TagVarCSV_trackSip3dSig_3'),
 		    taggingVarName = cms.string('trackSip3dSig')
 		 ),
 		cms.PSet(
-		    default = cms.double(-999),
+		    default = cms.double(-1.0),
 		    idx = cms.int32(0),
 		    name = cms.string('TagVarCSV_trackSip3dSigAboveCharm'),
 		    taggingVarName = cms.string('trackSip3dSigAboveCharm')
@@ -212,7 +212,7 @@ csvscikit_vpset = cms.VPSet(
 		    taggingVarName = cms.string('trackSumJetDeltaR')
 		 ),
 		cms.PSet(
-		    default = cms.double(-0.1),
+		    default = cms.double(-1.0),
 		    idx = cms.int32(0),
 		    name = cms.string('TagVarCSV_vertexMass'),
 		    taggingVarName = cms.string('vertexMass')
@@ -224,13 +224,13 @@ csvscikit_vpset = cms.VPSet(
 		    taggingVarName = cms.string('vertexNTracks')
 		 ),
 		cms.PSet(
-		    default = cms.double(-10),
+		    default = cms.double(-1),
 		    idx = cms.int32(0),
 		    name = cms.string('TagVarCSV_vertexEnergyRatio'),
 		    taggingVarName = cms.string('vertexEnergyRatio')
 		 ),
 		cms.PSet(
-		    default = cms.double(-0.1),
+		    default = cms.double(-1),
 		    idx = cms.int32(0),
 		    name = cms.string('TagVarCSV_vertexJetDeltaR'),
 		    taggingVarName = cms.string('vertexJetDeltaR')
