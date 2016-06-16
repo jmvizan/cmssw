@@ -107,25 +107,83 @@ float CSVscikitTagger::discriminator(const TagInfoHelper & tagInfo) const {
 	// Loop over input variables
 	std::map<std::string, float> inputs;
 	//std::cout << "jetvars->";
+	
+	//For debugging;
+	float save_pt_value = -1.0;
+	float save_eta_value = -999.0;
+	bool passes_cuts = false;
+	
+	bool notTaggable = false;
+	
+	bool printdebug = false;
+	
 	for(auto &mva_var : variables_){
 		//vectorial tagging variable
 		if(mva_var.has_index){
 			std::vector<float> vals = vars.getList(mva_var.id, false);
 			inputs[mva_var.name] = (vals.size() > mva_var.index) ? vals[mva_var.index] : mva_var.default_value;
-			////std::cout << " var[" << mva_var.name << "]=" << inputs[mva_var.name];
-			//std::cout << inputs[mva_var.name] << "\t";
+			////std::cout << " varVV[" << mva_var.name << "]=" << inputs[mva_var.name];
+			
+			////std::cout << " varVV[" << mva_var.name << "]";
+			
+			//at least _0 and _1 should exist
+			if (mva_var.name == "TagVarCSV_trackSip3dSig_1" && inputs[mva_var.name] > -99.001 && inputs[mva_var.name] < -98.999) notTaggable = true;
+			
+			if (passes_cuts) {
+			  if (printdebug) std::cout << inputs[mva_var.name] << "\t";
+			}
+
+			if (mva_var.name == "Jet_pt") {
+			  //std::cout << "foundJet_pt ";
+			  save_pt_value = inputs[mva_var.name];
+			}
+
+			if (mva_var.name == "Jet_eta") {
+			  //std::cout << "foundJet_eta ";
+			  save_eta_value = inputs[mva_var.name];
+			  passes_cuts = (save_pt_value > 30 && save_eta_value > -2.4 && save_eta_value < 2.4);
+			  //passes_cuts = true;
+			  
+			  if (printdebug) {if (passes_cuts) std::cout << save_pt_value << "\t" << save_eta_value << "\t";}
+			}
+			
+			
+			
+			
 		}
 		//single value tagging var
 		else {
 			inputs[mva_var.name] = vars.get(mva_var.id, mva_var.default_value);
-			////std::cout << " var[" << mva_var.name << "]=" << inputs[mva_var.name];
-			//std::cout << inputs[mva_var.name] << "\t";
+			////std::cout << " varSV[" << mva_var.name << "]=" << inputs[mva_var.name];
+			
+			////std::cout << " varSV[" << mva_var.name << "]";
+			
+			if (passes_cuts) {
+			  //if (mva_var.name == "TagVarCSV_jetNTracks") std::cout << save_pt_value << "\t" << save_eta_value << "\t" << inputs[mva_var.name] << "\t";
+			  //else std::cout << inputs[mva_var.name] << "\t";
+			  
+			  if (printdebug) std::cout << inputs[mva_var.name] << "\t";
+			
+			}
+			
+			//if (mva_var.name == "TagVarCSV_jetNTracks" && inputs[mva_var.name] < 0) notTaggable = true;
+			if (mva_var.name == "TagVarCSV_jetNTracks" && inputs[mva_var.name] < 2) notTaggable = true;
+			
 		}
+		
 	}
 
 	//get the MVA output
 	float tag = mvaID_->evaluate(inputs);
 	////std::cout << "---> tag = " << tag << std::endl;
-	//std::cout << tag <<"\n";
-	return tag;
+        //std::cout << tag <<"\n";
+	if (printdebug) {if (passes_cuts) std::cout << tag <<"\n";}
+	
+	
+	//std::cout <<"\n";
+	
+	//return tag;
+
+	if (notTaggable) return -1.0;
+	else return tag;
 }
