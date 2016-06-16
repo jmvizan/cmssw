@@ -38,7 +38,8 @@ bTagCommonBlock = cms.PSet(
     caloJetMCSrc = cms.InputTag(""), #To define only if you use the old flavour tool
     useOldFlavourTool = cms.bool(False), #Recommended only for CaloJets, if True then define caloJetMCSrc and ignore jetMCSrc
     # eta and pt ranges
-    ptRanges = cms.vdouble(50.0, 80.0, 120.0),
+    #ptRanges = cms.vdouble(50.0, 80.0, 120.0),
+    ptRanges = cms.vdouble(30, 50.0, 80.0, 120.0, 170.0, 300.0, 9999.),
     etaRanges = cms.vdouble(0.0, 1.4, 2.4),
     #Jet ID and EnergyCorr.
     doJetID = cms.bool(False),
