@@ -179,11 +179,15 @@ float CSVscikitTagger::discriminator(const TagInfoHelper & tagInfo) const {
         //std::cout << tag <<"\n";
 	if (printdebug) {if (passes_cuts) std::cout << tag <<"\n";}
 	
+	if (notTaggable) {
+	  if (false) std::cout << "do nothing" << std::endl;
+	  
+	}
 	
 	//std::cout <<"\n";
 	
-	//return tag;
+	return tag;
 
-	if (notTaggable) return -1.0;
-	else return tag;
+	//if (notTaggable) return -1.0;
+	//else return tag;
 }
